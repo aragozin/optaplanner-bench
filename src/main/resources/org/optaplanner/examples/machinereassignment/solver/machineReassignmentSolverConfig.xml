@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+  <solutionClass>org.optaplanner.examples.machinereassignment.domain.MachineReassignment</solutionClass>
+  <entityClass>org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment</entityClass>
+
+  <scoreDirectorFactory>
+    <incrementalScoreCalculatorClass>org.optaplanner.examples.machinereassignment.solver.score.MachineReassignmentIncrementalScoreCalculator</incrementalScoreCalculatorClass>
+    <!--<scoreDrl>org/optaplanner/examples/machinereassignment/solver/machineReassignmentScoreRules.drl</scoreDrl>-->
+  </scoreDirectorFactory>
+  <termination>
+    <minutesSpentLimit>5</minutesSpentLimit>
+  </termination>
+  
+  <!--<constructionHeuristic>-->
+    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--</constructionHeuristic>-->
+  <customPhase>
+    <customPhaseCommandClass>org.optaplanner.examples.machinereassignment.solver.solution.initializer.ToOriginalMachineSolutionInitializer</customPhaseCommandClass>
+  </customPhase>
+  <localSearch>
+    <unionMoveSelector>
+      <changeMoveSelector/>
+      <swapMoveSelector/>
+    </unionMoveSelector>
+    <acceptor>
+      <entityTabuSize>7</entityTabuSize>
+      <!--<lateAcceptanceSize>2000</lateAcceptanceSize>-->
+    </acceptor>
+    <forager>
+      <acceptedCountLimit>2000</acceptedCountLimit>
+      <!--<acceptedCountLimit>500</acceptedCountLimit>-->
+    </forager>
+  </localSearch>
+</solver>

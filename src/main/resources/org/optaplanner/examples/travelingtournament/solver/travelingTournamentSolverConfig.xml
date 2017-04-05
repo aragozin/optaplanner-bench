@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+  <solutionClass>org.optaplanner.examples.travelingtournament.domain.TravelingTournament</solutionClass>
+  <entityClass>org.optaplanner.examples.travelingtournament.domain.Match</entityClass>
+
+  <scoreDirectorFactory>
+    <scoreDrl>org/optaplanner/examples/travelingtournament/solver/travelingTournamentScoreRules.drl</scoreDrl>
+  </scoreDirectorFactory>
+
+  <termination>
+    <bestScoreLimit>0hard/0soft</bestScoreLimit>
+  </termination>
+
+  <!-- WARNING: This is an old, complex, tailored example. You're probably better off with one of the other examples. -->
+  <localSearch>
+    <unionMoveSelector>
+      <swapMoveSelector>
+        <cacheType>PHASE</cacheType>
+        <selectionOrder>SHUFFLED</selectionOrder><!-- TODO with no acceptedCountLimit this should be ORIGINAL -->
+        <filterClass>org.optaplanner.examples.travelingtournament.solver.move.factory.InverseMatchSwapMoveFilter</filterClass>
+      </swapMoveSelector>
+      <moveListFactory>
+        <cacheType>STEP</cacheType>
+        <selectionOrder>SHUFFLED</selectionOrder><!-- TODO with no acceptedCountLimit this should be ORIGINAL -->
+        <moveListFactoryClass>org.optaplanner.examples.travelingtournament.solver.move.factory.MatchChainRotationsMoveFactory</moveListFactoryClass>
+      </moveListFactory>
+    </unionMoveSelector>
+    <acceptor>
+      <solutionTabuSize>1500</solutionTabuSize>
+      <moveTabuSize>7</moveTabuSize>
+    </acceptor>
+    <forager>
+      <!-- Real world problems require to use of <acceptedCountLimit> -->
+    </forager>
+  </localSearch>
+</solver>
