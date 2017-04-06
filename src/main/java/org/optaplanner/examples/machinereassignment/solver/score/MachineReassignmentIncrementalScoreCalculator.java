@@ -38,6 +38,7 @@ import org.optaplanner.examples.machinereassignment.domain.MrNeighborhood;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.domain.MrResource;
 import org.optaplanner.examples.machinereassignment.domain.MrService;
+import org.optaplanner.examples.machinereassignment.domain.SimpleBag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,18 +152,18 @@ public class MachineReassignmentIncrementalScoreCalculator
 
         private final MrService service;
 
-        private Map<MrLocation, Integer> locationBag;
-        private Map<MrNeighborhood, Integer> neighborhoodBag;
+        private SimpleBag locationBag;
+        private SimpleBag neighborhoodBag;
         private int movedProcessCount;
 
         private MrServiceScorePart(MrService service) {
             this.service = service;
-            locationBag = new HashMap<>(machineReassignment.getLocationList().size());
+            locationBag = new SimpleBag();
             hardScore -= service.getLocationSpread();
             List<MrNeighborhood> neighborhoodList = machineReassignment.getNeighborhoodList();
-            neighborhoodBag = new HashMap<>(neighborhoodList.size());
+            neighborhoodBag = new SimpleBag();
             for (MrNeighborhood neighborhood : neighborhoodList) {
-                neighborhoodBag.put(neighborhood, 0);
+                neighborhoodBag.set(neighborhood, 0);
             }
             movedProcessCount = 0;
         }
@@ -170,22 +171,22 @@ public class MachineReassignmentIncrementalScoreCalculator
         private void addProcessAssignment(MrProcessAssignment processAssignment) {
             // Spread constraints
             MrLocation location = processAssignment.getLocation();
-            Integer locationProcessCount = locationBag.get(location);
-            if (locationProcessCount == null) {
+            int locationProcessCount = locationBag.get(location);
+            if (locationProcessCount == 0) {
                 if (service.getLocationSpread() > locationBag.size()) {
                     hardScore += (service.getLocationSpread() - locationBag.size());
                 }
-                locationBag.put(location, 1);
+                locationBag.set(location, 1);
                 if (service.getLocationSpread() > locationBag.size()) {
                     hardScore -= (service.getLocationSpread() - locationBag.size());
                 }
             } else {
-                locationBag.put(location, locationProcessCount + 1);
+                locationBag.set(location, locationProcessCount + 1);
             }
             // Dependency constraints
             MrNeighborhood neighborhood = processAssignment.getNeighborhood();
             int neighborhoodProcessCount = neighborhoodBag.get(neighborhood) + 1;
-            neighborhoodBag.put(neighborhood, neighborhoodProcessCount);
+            neighborhoodBag.set(neighborhood, neighborhoodProcessCount);
             for (MrService toDependencyService : service.getToDependencyServiceList()) {
                 int toDependencyNeighborhoodProcessCount = serviceScorePartMap.get(toDependencyService)
                         .neighborhoodBag.get(neighborhood);
@@ -225,17 +226,17 @@ public class MachineReassignmentIncrementalScoreCalculator
                 if (service.getLocationSpread() > locationBag.size()) {
                     hardScore += (service.getLocationSpread() - locationBag.size());
                 }
-                locationBag.remove(location);
+                locationBag.set(location, 0);
                 if (service.getLocationSpread() > locationBag.size()) {
                     hardScore -= (service.getLocationSpread() - locationBag.size());
                 }
             } else {
-                locationBag.put(location, locationProcessCount - 1);
+                locationBag.set(location, locationProcessCount - 1);
             }
             // Dependency constraints
             MrNeighborhood neighborhood = processAssignment.getNeighborhood();
             int neighborhoodProcessCount = neighborhoodBag.get(neighborhood) - 1;
-            neighborhoodBag.put(neighborhood, neighborhoodProcessCount);
+            neighborhoodBag.set(neighborhood, neighborhoodProcessCount);
             for (MrService toDependencyService : service.getToDependencyServiceList()) {
                 int toDependencyNeighborhoodProcessCount = serviceScorePartMap.get(toDependencyService)
                         .neighborhoodBag.get(neighborhood);
@@ -271,7 +272,7 @@ public class MachineReassignmentIncrementalScoreCalculator
 
         private final MrMachine machine;
         private final List<MrMachineCapacityScorePart> machineCapacityScorePartList;
-        private Map<MrService, Integer> serviceBag;
+        private SimpleBag serviceBag;
 
         public MrMachineScorePart(MrMachine machine) {
             this.machine = machine;
@@ -280,7 +281,7 @@ public class MachineReassignmentIncrementalScoreCalculator
             for (MrMachineCapacity machineCapacity : machineCapacityList) {
                 machineCapacityScorePartList.add(new MrMachineCapacityScorePart(machineCapacity));
             }
-            serviceBag = new HashMap<>(10);
+            serviceBag = new SimpleBag();
             doBalancePenaltyCosts();
         }
 
@@ -308,7 +309,7 @@ public class MachineReassignmentIncrementalScoreCalculator
                 hardScore -= (serviceProcessCount - 1);
             }
             serviceProcessCountInteger = serviceProcessCount == 0 ? null : serviceProcessCount;
-            serviceBag.put(service, serviceProcessCountInteger);
+            serviceBag.set(service, serviceProcessCountInteger);
             // Balance cost
             doBalancePenaltyCosts();
             // Move costs
@@ -336,8 +337,7 @@ public class MachineReassignmentIncrementalScoreCalculator
             if (serviceProcessCount > 1) {
                 hardScore -= (serviceProcessCount - 1);
             }
-            serviceProcessCountInteger = serviceProcessCount == 0 ? null : serviceProcessCount;
-            serviceBag.put(service, serviceProcessCountInteger);
+            serviceBag.set(service, serviceProcessCount);
             doBalancePenaltyCosts();
             // Move costs
             if (processAssignment.isMoved()) {
@@ -511,13 +511,11 @@ public class MachineReassignmentIncrementalScoreCalculator
                     }
                 }
             }
-            for (Map.Entry<MrService, Integer> entry : machineScorePart.serviceBag.entrySet()) {
-                Integer serviceProcessCount = entry.getValue();
-                if (serviceProcessCount == null) {
-                    serviceProcessCount = 0;
-                }
+            
+            for (MrService service : machineReassignment.getServiceList()) {
+                int serviceProcessCount = machineScorePart.serviceBag.get(service);
                 serviceConflictMatchTotal.addConstraintMatch(
-                        Arrays.asList(entry.getKey()),
+                        Arrays.asList(service),
                         HardSoftLongScore.valueOf(- (serviceProcessCount - 1), 0));
 
             }
