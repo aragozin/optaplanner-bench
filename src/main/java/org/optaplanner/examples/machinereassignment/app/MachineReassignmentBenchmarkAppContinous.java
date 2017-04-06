@@ -18,13 +18,15 @@ package org.optaplanner.examples.machinereassignment.app;
 
 import org.optaplanner.examples.common.app.CommonBenchmarkApp;
 
-public class MachineReassignmentBenchmarkApp extends CommonBenchmarkApp {
+public class MachineReassignmentBenchmarkAppContinous extends CommonBenchmarkApp {
 
     public static void main(String[] args) {
-        new MachineReassignmentBenchmarkApp().buildAndBenchmark(args);
+        while(true) {
+            new MachineReassignmentBenchmarkAppContinous().buildAndBenchmark(args);
+        }
     }
 
-    public MachineReassignmentBenchmarkApp() {
+    public MachineReassignmentBenchmarkAppContinous() {
         super(
                 new ArgOption("default",
                         "org/optaplanner/examples/machinereassignment/benchmark/machineReassignmentStepLimitBenchmarkConfig.xml"),
@@ -36,4 +38,5 @@ public class MachineReassignmentBenchmarkApp extends CommonBenchmarkApp {
                         "org/optaplanner/examples/machinereassignment/benchmark/machineReassignmentBenchmarkConfigTemplate.xml.ftl", true)
         );
     }
+
 }

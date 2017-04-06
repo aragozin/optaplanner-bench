@@ -50,24 +50,62 @@
             <forkCount>0.5C</forkCount>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <!-- WARNING: This configuration must be run with "mvn exec:java" not "mvn exec:exec". -->
-          <!-- It is impossible to write a configuration that is compatible with both exec:java and exec:exec -->
-          <configuration>
-            <mainClass>org.optaplanner.examples.app.OptaPlannerExamplesApp</mainClass>
-            <arguments>
-              <argument>-Xms256m</argument>
-              <!-- Most examples run (potentially slower) with max heap of 128 MB (so -Xmx128m), but 1 example's dataset requires 1.5 GB -->
-              <argument>-Xmx1536m</argument>
-              <argument>-server</argument>
-            </arguments>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>ui</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <!-- WARNING: This configuration must be run with "mvn exec:java" not "mvn exec:exec". -->
+            <!-- It is impossible to write a configuration that is compatible with both exec:java and exec:exec -->
+            <configuration>
+              <mainClass>org.optaplanner.examples.app.OptaPlannerExamplesApp</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>mrbench</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <!-- WARNING: This configuration must be run with "mvn exec:java" not "mvn exec:exec". -->
+            <!-- It is impossible to write a configuration that is compatible with both exec:java and exec:exec -->
+            <configuration>
+              <mainClass>org.optaplanner.examples.machinereassignment.app.MachineReassignmentBenchmarkApp</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>mrprofile</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <!-- WARNING: This configuration must be run with "mvn exec:java" not "mvn exec:exec". -->
+            <!-- It is impossible to write a configuration that is compatible with both exec:java and exec:exec -->
+            <configuration>
+              <mainClass>org.optaplanner.examples.machinereassignment.app.MachineReassignmentBenchmarkAppContinous</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <dependencies>
     <!-- Internal dependencies -->
