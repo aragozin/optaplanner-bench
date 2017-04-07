@@ -18,6 +18,8 @@
     to optimize business resource scheduling and planning.
 
     This module contains the non-web examples which demonstrate how to use it in a normal Java application.
+
+    (This modified version of OptaPlanner examples are used to demonstrate profiling techniques)
   </description>
   <url>https://www.optaplanner.org</url>
 
