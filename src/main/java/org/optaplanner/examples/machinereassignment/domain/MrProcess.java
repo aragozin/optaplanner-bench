@@ -16,14 +16,10 @@
 
 package org.optaplanner.examples.machinereassignment.domain;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @XStreamAlias("MrProcess")
 public class MrProcess extends AbstractPersistable {
@@ -33,7 +29,6 @@ public class MrProcess extends AbstractPersistable {
 
     // Order is equal to resourceList so resource.getIndex() can be used
     private List<MrProcessRequirement> processRequirementList;
-    private Map<MrResource, Long> usageMap = new HashMap<MrResource, Long>();
 
     public MrService getService() {
         return service;
@@ -57,12 +52,6 @@ public class MrProcess extends AbstractPersistable {
 
     public void setProcessRequirementList(List<MrProcessRequirement> processRequirementList) {
         this.processRequirementList = processRequirementList;
-        this.usageMap.clear();
-        for(MrProcessRequirement mpr: processRequirementList) {
-            if (mpr.getUsage() > 0) {
-                this.usageMap.put(mpr.getResource(), mpr.getUsage());
-            }
-        }
     }
 
     public MrProcessRequirement getProcessRequirement(MrResource resource) {
@@ -70,11 +59,7 @@ public class MrProcess extends AbstractPersistable {
     }
 
     public long getUsage(MrResource resource) {
-        Long usage = usageMap.get(resource);
-        if (usage == null) {
-            throw new NoSuchElementException();
-        }
-        return usage;
+        return processRequirementList.get(resource.getIndex()).getUsage();
     }
 
     public int getUsageMultiplicand() {

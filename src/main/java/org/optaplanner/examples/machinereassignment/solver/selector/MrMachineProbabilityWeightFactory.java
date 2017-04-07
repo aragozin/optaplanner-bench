@@ -16,8 +16,6 @@
 
 package org.optaplanner.examples.machinereassignment.solver.selector;
 
-import java.util.NoSuchElementException;
-
 import org.optaplanner.core.impl.heuristic.selector.common.decorator.SelectionProbabilityWeightFactory;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
@@ -38,12 +36,7 @@ public class MrMachineProbabilityWeightFactory implements SelectionProbabilityWe
             if (someProcessAssignment.getMachine() == machine) {
                 MrProcess process = someProcessAssignment.getProcess();
                 for (MrResource resource : machineReassignment.getResourceList()) {
-                    try {
-                        usage[resource.getIndex()] += process.getUsage(resource);
-                    }
-                    catch(NoSuchElementException e) {
-                        // ignore
-                    }
+                    usage[resource.getIndex()] += process.getUsage(resource);
                 }
             }
         }
