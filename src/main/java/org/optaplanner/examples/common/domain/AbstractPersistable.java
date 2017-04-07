@@ -19,7 +19,6 @@ package org.optaplanner.examples.common.domain;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.score.constraint.ConstraintMatch;
 
@@ -43,21 +42,30 @@ public abstract class AbstractPersistable implements Serializable, Comparable<Ab
         this.id = id;
     }
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (id == null || !(o instanceof AbstractPersistable)) {
-            return false;
-        } else {
-            AbstractPersistable other = (AbstractPersistable) o;
-            return getClass().equals(other.getClass()) && id.equals(other.id);
-        }
-    }
+// This part is currently commented out because it's probably a bad thing to mix identification with equality
 
-    public int hashCode() {
-        return new HashCodeBuilder().append(getClass()).append(id).toHashCode();
-    }
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (id == null || !(o instanceof AbstractPersistable)) {
+//            return false;
+//        } else {
+//            AbstractPersistable other = (AbstractPersistable) o;
+//            return getClass().equals(other.getClass()) && id.equals(other.id);
+//        }
+//    }
+//
+//    public int hashCode() {
+//        if (id == null) {
+//            return super.hashCode();
+//        } else {
+//            // A direct implementation (instead of HashCodeBuilder) to avoid dependencies
+//            return (((17 * 37)
+//                    + getClass().hashCode())) * 37
+//                    + id.hashCode();
+//        }
+//    }
 
     /**
      * Used by the GUI to sort the {@link ConstraintMatch} list
