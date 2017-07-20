@@ -43,7 +43,7 @@
   </repositories>
 
   <properties>
-    <jvm-options>-Xmx512m -XX:+NeverActAsServerClassMachine -XX:CICompilerCount=1 -XX:-TieredCompilation -XX:-DoEscapeAnalysis</jvm-options>
+    <jvm-options>-Xmx512m</jvm-options>
   </properties>
 
   <build>
