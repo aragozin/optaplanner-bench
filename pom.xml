@@ -44,7 +44,7 @@
   </repositories>
 
   <properties>
-    <jvm-options>-Xmx512m -XX:+NeverActAsServerClassMachine -XX:CICompilerCount=1 -XX:-TieredCompilation -XX:-DoEscapeAnalysis -Dlogback.level.org.optaplanner=debug</jvm-options>
+    <jvm-options>-Xmx512m -Dlogback.level.org.optaplanner=debug</jvm-options>
     <enforcer.skip>true</enforcer.skip>
   </properties>
 
