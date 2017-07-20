@@ -94,6 +94,9 @@ public class MrProcessAssignment extends AbstractPersistable {
         catch(NoSuchElementException e) {
             return 0;
         }
+        catch(NullPointerException e) {
+        	return 0;
+        }
     }
 
     public String getLabel() {
