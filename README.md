@@ -1,21 +1,15 @@
 Optiplanner profiling example
 ====
 
-This is a material for Java profiling workshop by Aleskey Ragozin
+This is a material for Java profiling workshop by Alexey Ragozin
 
-Run GUI
+Start GUI
 ----
 
- - `mvn `
+ - `mvn -P ui compile exec:java`
 
-Benches
+Running benchmark
 ----
 
- - `mvn -Pbench test` - stack trace dump parser demo
-
-
-Change sets
-----
-
- - master
- - bench/bias-sjk/cs-1 - upgraged SJK version
+ - `mvn -Pbench test` - run optimization once
+ - `mvn -Pprofile test` - run optimization in endless loop (for profiling)
