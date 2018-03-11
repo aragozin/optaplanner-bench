@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plannerBenchmark>
   <benchmarkDirectory>local/data/cheaptime</benchmarkDirectory>
-  <parallelBenchmarkCount>AUTO</parallelBenchmarkCount>
+  <!-- <parallelBenchmarkCount>AUTO</parallelBenchmarkCount> -->
 
   <inheritedSolverBenchmark>
     <problemBenchmarks>
       <solutionFileIOClass>org.optaplanner.examples.cheaptime.persistence.CheapTimeSolutionFileIO</solutionFileIOClass>
-      <inputSolutionFile>data/cheaptime/import/instance00</inputSolutionFile>
+      <!-- <inputSolutionFile>data/cheaptime/import/demo01</inputSolutionFile> -->
+      <inputSolutionFile>data/cheaptime/import/sample08</inputSolutionFile>
+      <!--<inputSolutionFile>data/cheaptime/import/instance00</inputSolutionFile>
       <inputSolutionFile>data/cheaptime/import/instance01</inputSolutionFile>
       <inputSolutionFile>data/cheaptime/import/instance02</inputSolutionFile>
       <inputSolutionFile>data/cheaptime/import/instance03</inputSolutionFile>
@@ -55,8 +57,8 @@
       <inputSolutionFile>data/cheaptime/import/instance46</inputSolutionFile>
       <inputSolutionFile>data/cheaptime/import/instance47</inputSolutionFile>
       <inputSolutionFile>data/cheaptime/import/instance48</inputSolutionFile>
-      <inputSolutionFile>data/cheaptime/import/instance49</inputSolutionFile>
-      <problemStatisticType>BEST_SCORE</problemStatisticType>
+      <inputSolutionFile>data/cheaptime/import/instance49</inputSolutionFile>-->
+      <!--<problemStatisticType>BEST_SCORE</problemStatisticType>-->
       <!--<problemStatisticType>STEP_SCORE</problemStatisticType>-->
       <!--<problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>-->
       <!--<problemStatisticType>BEST_SOLUTION_MUTATION</problemStatisticType>-->
@@ -66,7 +68,7 @@
       <!--<singleStatisticType>CONSTRAINT_MATCH_TOTAL_STEP_SCORE</singleStatisticType>-->
       <!--<singleStatisticType>PICKED_MOVE_TYPE_BEST_SCORE_DIFF</singleStatisticType>-->
       <!--<singleStatisticType>PICKED_MOVE_TYPE_STEP_SCORE_DIFF</singleStatisticType>-->
-      <writeOutputSolutionEnabled>true</writeOutputSolutionEnabled>
+      <!--<writeOutputSolutionEnabled>true</writeOutputSolutionEnabled>-->
     </problemBenchmarks>
 
     <solver>
@@ -75,13 +77,13 @@
       <entityClass>org.optaplanner.examples.cheaptime.domain.TaskAssignment</entityClass>
       <scoreDirectorFactory>
         <incrementalScoreCalculatorClass>org.optaplanner.examples.cheaptime.solver.score.CheapTimeIncrementalScoreCalculator</incrementalScoreCalculatorClass>
-        <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+        <!-- <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend> -->
         <!--<assertionScoreDirectorFactory>-->
         <!--<easyScoreCalculatorClass>org.optaplanner.examples.cheaptime.solver.score.CheapTimeEasyScoreCalculator</easyScoreCalculatorClass>-->
         <!--</assertionScoreDirectorFactory>-->
       </scoreDirectorFactory>
       <termination>
-        <minutesSpentLimit>5</minutesSpentLimit>
+        <minutesSpentLimit>2</minutesSpentLimit>
       </termination>
     </solver>
   </inheritedSolverBenchmark>
@@ -96,6 +98,12 @@
         </forager>
       </constructionHeuristic>
       <localSearch>
+        <termination>
+          <!-- <terminationCompositionStyle>OR</terminationCompositionStyle> -->
+          <!-- <stepCountLimit>50000</stepCountLimit> -->
+          <!-- <unimprovedStepCountLimit>3000</unimprovedStepCountLimit> -->
+          <bestScoreLimit>0hard/-1000000000000000medium/0soft</bestScoreLimit>
+        </termination>          
         <unionMoveSelector>
           <changeMoveSelector>
             <valueSelector>
@@ -114,39 +122,6 @@
         </acceptor>
         <forager>
           <acceptedCountLimit>1</acceptedCountLimit>
-        </forager>
-      </localSearch>
-    </solver>
-  </solverBenchmark>
-  <solverBenchmark>
-    <name>FFFD - TS 7-2000 SO</name>
-    <solver>
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-        <forager>
-          <pickEarlyType>FIRST_FEASIBLE_SCORE_OR_NON_DETERIORATING_HARD</pickEarlyType>
-        </forager>
-      </constructionHeuristic>
-      <localSearch>
-        <unionMoveSelector>
-          <changeMoveSelector>
-            <valueSelector>
-              <variableName>startPeriod</variableName>
-            </valueSelector>
-          </changeMoveSelector>
-          <changeMoveSelector>
-            <valueSelector>
-              <variableName>machine</variableName>
-            </valueSelector>
-          </changeMoveSelector>
-          <swapMoveSelector/>
-        </unionMoveSelector>
-        <acceptor>
-          <entityTabuSize>7</entityTabuSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>2000</acceptedCountLimit>
-          <finalistPodiumType>STRATEGIC_OSCILLATION</finalistPodiumType>
         </forager>
       </localSearch>
     </solver>

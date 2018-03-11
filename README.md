@@ -11,5 +11,12 @@ Start GUI
 Running benchmark
 ----
 
+"Machine reassignment" case
+
  - `mvn -Pbench test` - run optimization once
  - `mvn -Pprofile test` - run optimization in endless loop (for profiling)
+
+"Cheap time" case
+
+ - `mvn -Pbench2 test` - run optimization once
+ - `mvn -Pprofile2 test` - run optimization in endless loop (for profiling)

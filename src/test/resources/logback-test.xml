@@ -2,6 +2,11 @@
 <configuration>
 
   <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+
     <encoder>
       <!-- %L lowers performance -->
       <!--<pattern>%d [%t] %-5p %L%n  %m%n</pattern>-->
@@ -9,12 +14,33 @@
     </encoder>
   </appender>
 
-  <logger name="org.optaplanner" level="info"/>
+
+  <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+    <file>target/optaplanner.log</file>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>target/optaplanner-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>100MB</maxFileSize>    
+      <maxHistory>5</maxHistory>
+      <totalSizeCap>500MB</totalSizeCap>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+    </encoder>
+  </appender>
+
+
+  <!-- To override the debug log level from the command line, use the VM option "-Dlogback.level.org.optaplanner=trace" -->
+  <logger name="org.optaplanner" level="${logback.level.org.optaplanner:-debug}"/>
+
   <!-- Don't pollute the test log with a stacktrace -->
   <logger name="org.optaplanner.benchmark.impl.DefaultPlannerBenchmark.singleBenchmarkRunnerException" level="error"/>
 
   <root level="warn">
     <appender-ref ref="consoleAppender" />
+    <appender-ref ref="fileAppender" />
   </root>
 
 </configuration>

@@ -56,6 +56,8 @@ public class CheapTimeIncrementalScoreCalculator extends AbstractIncrementalScor
     private long hardScore;
     private long mediumScore;
     private long softScore;
+    
+    private long averagePrice;
 
     private Machine oldMachine = null;
     private Integer oldStartPeriod = null;
@@ -70,6 +72,7 @@ public class CheapTimeIncrementalScoreCalculator extends AbstractIncrementalScor
         hardScore = 0L;
         mediumScore = 0L;
         softScore = 0L;
+        averagePrice = calculateAveragePrice(solution);
         if (solution.getGlobalPeriodRangeFrom() != 0) {
             throw new IllegalStateException("The globalPeriodRangeFrom (" + solution.getGlobalPeriodRangeFrom()
                     + ") should be 0.");
@@ -97,7 +100,19 @@ public class CheapTimeIncrementalScoreCalculator extends AbstractIncrementalScor
         }
     }
 
-    @Override
+    private long calculateAveragePrice(CheapTimeSolution solution) {
+		long tp = 0;
+		long tt = 0;
+//		long max = Long.MIN_VALUE;
+		for(PeriodPowerPrice ppp: solution.getPeriodPowerPriceList()) {
+			tp += ppp.getPowerPriceMicros();
+			tt += 1;
+//			max = Math.max(max, ppp.getPowerPriceMicros());
+		}
+		return tp / tt;
+	}
+
+	@Override
     public void beforeEntityAdded(Object entity) {
         // Do nothing
     }
@@ -277,7 +292,7 @@ public class CheapTimeIncrementalScoreCalculator extends AbstractIncrementalScor
             machinePeriod.retractTaskAssignment(taskAssignment);
             if (retractTaskCost) {
                 mediumScore += CheapTimeCostCalculator.multiplyTwoMicros(powerConsumptionMicros,
-                        machinePeriod.periodPowerPriceMicros);
+                        (machinePeriod.periodPowerPriceMicros - averagePrice));
             }
             // SpinUp vs idle
             if (machinePeriod.status.isActive()) {
@@ -356,7 +371,7 @@ public class CheapTimeIncrementalScoreCalculator extends AbstractIncrementalScor
             machinePeriod.insertTaskAssignment(taskAssignment);
             if (insertTaskCost) {
                 mediumScore -= CheapTimeCostCalculator.multiplyTwoMicros(powerConsumptionMicros,
-                        machinePeriod.periodPowerPriceMicros);
+                        (machinePeriod.periodPowerPriceMicros - averagePrice));
             }
             // SpinUp vs idle
             if (machinePeriod.status == MachinePeriodStatus.SPIN_UP_AND_ACTIVE && i != startPeriod) {

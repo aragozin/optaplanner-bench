@@ -5,13 +5,8 @@ import org.optaplanner.examples.machinereassignment.app.MachineReassignmentBench
 
 public class MachineReassignmentSingle {
 
-	static {
-		System.getProperties().setProperty("logback.level.org.optaplanner", "info");
-	}
-	
 	@Test
 	public void run() {
 		MachineReassignmentBenchmarkApp.main(new String[0]);
-	}
-	
+	}	
 }
