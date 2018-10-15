@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n"/>
+      <ThresholdFilter level="info"/>
+    </Console>
+    <RollingFile name="File" filename="target/optoplanner.log" filePattern="target/optoplanner.%i.log">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n"/>
+      <Policies>
+        <OnStartupTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy size="100 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="2"/>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+
+    <Logger name="org.optaplanner" level="${sys:logback.level.org.optaplanner:-debug}" additivity="true">
+      <AppenderRef ref="File"/>
+    </Logger>
+
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+
+  </Loggers>
+</Configuration>

@@ -26,6 +26,7 @@
   <repositories>
     <!-- TODO remove this once maven central replicates the jboss repository -->
     <!-- Included so the examples sources in the distribution zip build out-of-the-box with maven -->
+    
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Repository Group</name>
@@ -44,6 +45,7 @@
 
   <properties>
     <jvm-options>-Xmx512m -XX:+NeverActAsServerClassMachine -XX:CICompilerCount=1 -XX:-TieredCompilation -XX:-DoEscapeAnalysis -Dlogback.level.org.optaplanner=debug</jvm-options>
+    <enforcer.skip>true</enforcer.skip>
   </properties>
 
   <build>
@@ -206,10 +208,66 @@
       </build>
     </profile>
 
+    <profile>
+      <id>log4j2</id>
+      <activation>
+        <property>
+          <name>log4j</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>logback</id>
+      <activation>
+        <property>
+          <name>!log4j</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
   </profiles>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.25</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>2.11.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>2.11.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>2.11.1</version>
+      </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
@@ -285,16 +343,7 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+
     <!-- XML -->
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
